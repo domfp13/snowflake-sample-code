@@ -8,7 +8,7 @@ USE ROLE SECURITYADMIN;
 CREATE OR REPLACE ROLE ANALYST
  COMMENT  = 'ANALYST';
 
--- 2.- Take a look ta the user interface
+-- 2.- Take a look ta the user interface to visualize the role
 
 -- 3.- Granting role analyst to role sysadmin
 USE ROLE SECURITYADMIN;
@@ -82,4 +82,3 @@ GRANT ROLE ANALYST TO ROLE SYSADMIN;
 USE ROLE SYSADMIN;
 USE WAREHOUSE SNOWPROCORE;
 SELECT * FROM SNOWPROCORE.PUBLIC.CUSTOMER_SUMMARY;
-
