@@ -12,5 +12,6 @@ conda create --name snowpark --override-channels -c https://repo.anaconda.com/pk
 
 Installing xlrd python package which is used to read xls files
 ```
+ conda install ipykernel
  conda install xlrd=2.0.1
 ```
