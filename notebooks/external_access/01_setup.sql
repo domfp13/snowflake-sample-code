@@ -99,4 +99,15 @@ USE ROLE SYSADMIN;
 USE WAREHOUSE EXTERNAL_ACCESS_WH;
 SELECT EXTERNAL_ACCESS_DB.PUBLIC.google_translate_python('Good morning', 'es');
 
+CREATE TABLE EXTERNAL_ACCESS_DB.PUBLIC.TRANSLATIONS
+(
+  SENTENCE VARCHAR(1000)
+);
+
+INSERT INTO EXTERNAL_ACCESS_DB.PUBLIC.TRANSLATIONS (SENTENCE) VALUES ('Keep in mind that these are general differences and both novels and films can vary widely in their storytelling techniques based on the preferences of the author/director and the specific genre or style of the work.')
+INSERT INTO EXTERNAL_ACCESS_DB.PUBLIC.TRANSLATIONS (SENTENCE) VALUES ('The name of your OAuth 2.0 client. This name is only used to identify the client in the console and will not be shown to end users.');
+
+SELECT SENTENCE FROM EXTERNAL_ACCESS_DB.PUBLIC.TRANSLATIONS;
+SELECT SENTENCE, EXTERNAL_ACCESS_DB.PUBLIC.google_translate_python(SENTENCE, 'DE') FROM EXTERNAL_ACCESS_DB.PUBLIC.TRANSLATIONS;
+
 USE ROLE SYSADMIN;
