@@ -254,5 +254,6 @@ packaged-template.yaml
 .terraform/
 .terraform.lock.hcl
 terraform.tfstate
+terraform.tfstate.backup
 
 # End of https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
