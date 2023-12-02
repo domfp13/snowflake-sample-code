@@ -7,7 +7,7 @@ Add your credentials to the ./notebooks/credentials.py
 # If you are using Codespaces or Devcontianers
 Creating new python environment in dev container
 ```
-conda create --name snowpark --override-channels -c https://repo.anaconda.com/pkgs/snowflake python=3.10 numpy pandas snowflake-snowpark-python
+conda create --name snowpark --override-channels -c https://repo.anaconda.com/pkgs/snowflake python=3.10 numpy pandas ipykernel snowflake-snowpark-python ipykernel
 ```
 
 Installing xlrd python package which is used to read xls files
