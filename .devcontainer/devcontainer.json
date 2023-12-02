@@ -4,6 +4,18 @@
         "dockerfile": "./Dockerfile",
         "context": "."
     },
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "8gb",
+        "storage": "32gb"
+    },
+    "portsAttributes": {
+        "8888": {
+            "label": "Jupyter notebook port"
+        }
+    },
+    "forwardPorts": [8888],
+    "waitFor": "onCreateCommand",
     "customizations": {
         "codespaces": {
             "openFiles": ["./README.md"]
