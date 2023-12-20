@@ -6,8 +6,8 @@
     },
     "hostRequirements": {
         "cpus": 4,
-        "memory": "8gb",
-        "storage": "32gb"
+        "memory": "2gb",
+        "storage": "10gb"
     },
     "portsAttributes": {
         "8888": {
