@@ -12,8 +12,8 @@
 #       environment. 
 
 # This is the base image
-#FROM --platform=linux/amd64 continuumio/miniconda3 AS base
-FROM continuumio/miniconda3 AS base
+FROM --platform=linux/amd64 continuumio/miniconda3 AS base
+#FROM continuumio/miniconda3 AS base
 LABEL maintainer="Enrique Plata"
 ENV APP_HOME /opt/notebooks
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -24,7 +24,14 @@ FROM base AS installer
 USER root
 RUN apt-get update && \
     apt-get install -y curl unzip && \
-    echo "running in codespace" > /tmp/.is_codespace_env.txt # Used by execution script to verify if we are running in a codespace docker environment
+    echo "running in codespace" > /tmp/.is_codespace_env.txt
+
+# Create a non-root user 'myuser' and set the user's home directory
+RUN useradd -m myuser
+
+# Switch to 'myuser'
+USER myuser
+
 SHELL ["conda", "run", "/bin/bash", "-c"]
 RUN pip install --upgrade pip
 RUN pip install --upgrade \
@@ -33,8 +40,8 @@ RUN pip install --upgrade \
 
 #Setting up Snowpark Python conda environment
 FROM installer AS deps
-COPY environment.yml* /tmp/installation-scripts/
-RUN conda create -n snowparkenv -c https://repo.anaconda.com/pkgs/snowflake python=3.8
+COPY environment.yml /tmp/installation-scripts/
+RUN conda create -n snowparkenv -c https://repo.anaconda.com/pkgs/snowflake python=3.10
 SHELL ["conda", "run", "-n", "snowparkenv", "/bin/bash", "-c"]
 RUN /opt/conda/bin/conda env update -f /tmp/installation-scripts/environment.yml
 
@@ -48,3 +55,5 @@ RUN chmod +x /tmp/installation-scripts/install_snowflake.sh \
 
 # Used by execution script to verify if we are running in a codespace docker environment 
 RUN echo "running in codespace" > /tmp/.is_codespace_env.txt 
+
+USER myuser
