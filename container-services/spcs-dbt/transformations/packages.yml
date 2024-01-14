@@ -1,0 +1,10 @@
+---
+packages:
+  - package: calogica/dbt_expectations
+    version: 0.5.1
+    # <see https://github.com/calogica/dbt-expectations/releases/latest> for the latest version tag
+  - package: tnightengale/dbt_meta_testing
+    version: 0.3.5
+    # https://github.com/tnightengale/dbt-meta-testing/releases
+  - package: dbt-labs/dbt_utils
+    version: 0.8.0
