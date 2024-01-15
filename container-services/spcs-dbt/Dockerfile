@@ -6,6 +6,7 @@ FROM python:3.10.0-slim
 # PYTHONDONTWRITEBYTECODE: Prevents Python from writing .pyc files
 # PYTHONUNBUFFERED: Prevents Python from buffering stdout and stderr
 ENV APP_HOME /usr/src/app
+ENV DBT_DIR /usr/src/app/transformations
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -37,9 +38,18 @@ WORKDIR $APP_HOME
 # Copy the entrypoint.sh script from your host to the APP_HOME directory in the Docker image
 COPY entrypoint.sh $APP_HOME/entrypoint.sh
 
+# Copy the transformations directory from your host to the APP_HOME directory in the Docker image
+COPY transformations $APP_HOME/transformations
+
 # Use the RUN command to make the entrypoint.sh script executable
 RUN chmod +x $APP_HOME/entrypoint.sh
 
+# Copy the profiles.yml file from your host to the /root/.dbt directory in the Docker image
+RUN mkdir -p /root/.dbt && \
+    cp $APP_HOME/transformations/profiles.yml /root/.dbt/
+
+WORKDIR $DBT_DIR
+
 # Set the entrypoint of the Docker image to the entrypoint.sh script
 # When a container is started from this image, it will execute this script
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "../entrypoint.sh" ]
