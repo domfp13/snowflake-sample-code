@@ -9,7 +9,7 @@ include .env
 build-docker-image-local: ## 1.-Building docker image locally.
 	@ echo "**********Cleaning container**********"
 	# docker build --no-cache -t dbt-runner-image . # --no-cache
-	docker build -t dbt-runner-image .
+	@ docker build -t dbt-runner-image .
 
 .PHONY: run-docker-container-local
 run-docker-container-local: ## 2.-Running docker container locally.
@@ -35,7 +35,7 @@ push-docker-image-registry: ## 5.-Pushing docker image to registry.
 	@ echo "********** Tagging image to registry **********"
 	@ docker tag dbt-runner-image $(IMAGEREPOSITORYURI)/dbt-runner-image
 	@ echo "********** Pushing image to registry **********"
-	docker push $(IMAGEREPOSITORYURI)/dbt-runner-image
+	@ docker push $(IMAGEREPOSITORYURI)/dbt-runner-image
 
 .PHONY: upload-dbt-specs
 upload-dbt-specs: ## 6.-Uploading dbt specs to specs stage.
