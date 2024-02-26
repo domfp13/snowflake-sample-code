@@ -1,0 +1,26 @@
+spec:
+  containers:
+    - name: dbt-runner
+      image: <YOUR IMAGE REGISTRY URL>
+      env:
+        ACCOUNT: <YOUR SNOWFLAKE ACCOUNT>
+        DATABASE_USERNAME: dockeruser
+        DATABASE_PASSWORD: superdocker
+        DATABASE: FOOBAR_DB
+        WAREHOUSE: COMPUTE_WH
+    - name: dbt-docs
+      image: <YOUR IMAGE REGISTRY URL>
+      env:
+        ACCOUNT: <YOUR SNOWFLAKE ACCOUNT>
+        DATABASE_USERNAME: dockeruser
+        DATABASE_PASSWORD: superdocker
+        DATABASE: FOOBAR_DB
+        WAREHOUSE: COMPUTE_WH
+      command: ["/bin/bash", "-c", "dbt docs generate && dbt docs serve --port 8001"]
+  endpoints:
+    - name: dbt-docs
+      port: 8001
+      public: true
+  logExporters:
+    eventTableConfig:
+      logLevel: INFO
