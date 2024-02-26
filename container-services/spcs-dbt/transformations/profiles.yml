@@ -1,0 +1,13 @@
+aws_eu_central:
+  outputs:
+    dev:
+      account: "{{ env_var('ACCOUNT') }}"
+      user: "{{ env_var('DATABASE_USERNAME') }}"
+      password: "{{ env_var('DATABASE_PASSWORD') }}"
+      role: SYSADMIN
+      database: "{{ env_var('DATABASE') }}"
+      schema: RAW
+      threads: 5
+      type: snowflake
+      warehouse: "{{ env_var('WAREHOUSE') }}"
+  target: dev

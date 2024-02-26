@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  # dbt container
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dbt-runner-image:latest
+    container_name: dbt-runner
+    environment:
+      - ACCOUNT=${ACCOUNT}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE=${DATABASE}
+      - WAREHOUSE=${WAREHOUSE}
+    stdin_open: true
+    #tty: true
+    restart: on-failure:2
+  # dbt docs
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dbt-runner-image:latest
+    container_name: dbt-docs
+    environment:
+      - ACCOUNT=${ACCOUNT}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE=${DATABASE}
+      - WAREHOUSE=${WAREHOUSE}
+    ports:
+      - "8001:8001"
+    restart: on-failure:2
+    entrypoint: ["/bin/bash", "-c", "dbt docs generate && dbt docs serve --port 8001"]
