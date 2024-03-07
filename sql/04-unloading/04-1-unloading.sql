@@ -31,21 +31,30 @@ FROM (
     INNER JOIN SNOWPROCORE.PUBLIC.ACCOUNT_STATUS_CODE_MAPPING AS ASCM
         ON AR.ACCOUNT_STATUS_CODE = ASCM.ACCOUNT_STATUS_CODE
 )
-FILE_FORMAT = (FORMAT_NAME = SNOWPROCORE.PUBLIC.FILE_FORMAT_CSV_GENERIC)
-;
+FILE_FORMAT = (FORMAT_NAME = SNOWPROCORE.PUBLIC.FILE_FORMAT_CSV_GENERIC, FIELD_OPTIONALLY_ENCLOSED_BY = '"');
+
+RM @SNOWPROCORE.PUBLIC.STAGE_INTERNAL_ACCOUNTS/TRANSFORMED_ACCOUNTS/data_0_0_0.csv.gz;
+LS @SNOWPROCORE.PUBLIC.STAGE_INTERNAL_ACCOUNTS;
 
 --****************************** 3.- Downloading to local ******************************
 -- Please refer to the following https://docs.snowflake.com/en/user-guide/data-unload-snowflake
-GET @SNOWPROCORE.PUBLIC.STAGE_INTERNAL_ACCOUNTS/TRANSFORMED_ACCOUNTS/data_0_0_0.csv.gz file:///Users/eplata/Developer/personal/snowflake-sample-code/sql/03-unloading/data_0_0_0.csv.gz;
+GET @SNOWPROCORE.PUBLIC.STAGE_INTERNAL_ACCOUNTS/TRANSFORMED_ACCOUNTS/data_0_0_0.csv.gz file://///Users/eplata/Developer/personal/snowflake-sample-code/sql/04-unloading;
 -- gunzip data_0_0_0.csv.gz
 
+--****************************** 4.- Unloading to external stage ******************************
+DESC STAGE STAGE_EXTERNAL_ACCOUNTS_AWS;
+SHOW INTEGRATIONS;
 
+COPY INTO 's3://snowflake-ep-snowprocore/unload/'
+FROM (
+    SELECT AR.ACCESSIBLE_BALANCE, AR.ACCOUNT_BALANCE, ASCM.ACCOUNT_STATUS_DESCRIPTION
+    FROM SNOWPROCORE.PUBLIC.ACCOUNTS_RAW AS AR
+    INNER JOIN SNOWPROCORE.PUBLIC.ACCOUNT_STATUS_CODE_MAPPING AS ASCM
+        ON AR.ACCOUNT_STATUS_CODE = ASCM.ACCOUNT_STATUS_CODE
+)
+STORAGE_INTEGRATION = AWS_SNOWFLAKE_EP_SNOWPROCORE
+FILE_FORMAT = (FORMAT_NAME = SNOWPROCORE.PUBLIC.FILE_FORMAT_CSV_GENERIC, FIELD_OPTIONALLY_ENCLOSED_BY = '"');
 
--- some other script
--- UNLOADING DATA
-COPY INTO @SNOWPROCORE.RAW.FILES_STAGE/ FROM (SELECT * FROM SNOWPROCORE.PUBLIC.ACCOUNTS_RAW) FILE_FORMAT = (FORMAT_NAME = 'SNOWPROCORE.RAW.CSV_UNLOADING_FORMAT');
-
-LS @SNOWPROCORE.RAW.FILES_STAGE;
-RM @SNOWPROCORE.RAW.FILES_STAGE/data_0_0_0.csv/data_0_0_0.csv;
-
-GET @SNOWPROCORE.RAW.FILES_STAGE/data_0_0_0.csv file:////Users/eplata/Developer/personal/snowflake-sample-code/sql/02-loading;
+--****************************** 5.- Downloading to local ******************************
+-- aws s3 cp s3://snowflake-ep-snowprocore/unload/ /Users/eplata/Developer/personal/snowflake-sample-code/sql/04-unloading --recursive
+-- gunzip data_0_0_0.csv.gz
