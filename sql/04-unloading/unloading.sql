@@ -38,3 +38,14 @@ FILE_FORMAT = (FORMAT_NAME = SNOWPROCORE.PUBLIC.FILE_FORMAT_CSV_GENERIC)
 -- Please refer to the following https://docs.snowflake.com/en/user-guide/data-unload-snowflake
 GET @SNOWPROCORE.PUBLIC.STAGE_INTERNAL_ACCOUNTS/TRANSFORMED_ACCOUNTS/data_0_0_0.csv.gz file:///Users/eplata/Developer/personal/snowflake-sample-code/sql/03-unloading/data_0_0_0.csv.gz;
 -- gunzip data_0_0_0.csv.gz
+
+
+
+-- some other script
+-- UNLOADING DATA
+COPY INTO @SNOWPROCORE.RAW.FILES_STAGE/ FROM (SELECT * FROM SNOWPROCORE.PUBLIC.ACCOUNTS_RAW) FILE_FORMAT = (FORMAT_NAME = 'SNOWPROCORE.RAW.CSV_UNLOADING_FORMAT');
+
+LS @SNOWPROCORE.RAW.FILES_STAGE;
+RM @SNOWPROCORE.RAW.FILES_STAGE/data_0_0_0.csv/data_0_0_0.csv;
+
+GET @SNOWPROCORE.RAW.FILES_STAGE/data_0_0_0.csv file:////Users/eplata/Developer/personal/snowflake-sample-code/sql/02-loading;
