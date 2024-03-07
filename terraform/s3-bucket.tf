@@ -1,14 +1,14 @@
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "snowflake-ep-hackathon"
+  bucket = "snowflake-ep-snowprocore"
   tags = {
-    Name        = "enrique-plata-snowflake-hackathon"
+    Name        = "enrique-plata-snowflake-snowprocore"
     Environment = "DEV"
   }
 }
 
 resource "aws_iam_policy" "bucket_policy" {
-  name        = "snowflake-ep-hackathon-s3-policy"
-  description = "Policy for bucket snowflake-ep-hackathon"
+  name        = "snowflake-ep-snowprocore-s3-policy"
+  description = "Policy for bucket snowflake-ep-snowprocore"
 
   policy = <<EOF
 {
@@ -23,7 +23,7 @@ resource "aws_iam_policy" "bucket_policy" {
               "s3:DeleteObject",
               "s3:DeleteObjectVersion"
             ],
-            "Resource": "arn:aws:s3:::snowflake-ep-hackathon/*"
+            "Resource": "arn:aws:s3:::snowflake-ep-snowprocore/*"
         },
         {
             "Effect": "Allow",
@@ -31,7 +31,7 @@ resource "aws_iam_policy" "bucket_policy" {
                 "s3:ListBucket",
                 "s3:GetBucketLocation"
             ],
-            "Resource": "arn:aws:s3:::snowflake-ep-hackathon",
+            "Resource": "arn:aws:s3:::snowflake-ep-snowprocore",
             "Condition": {
                 "StringLike": {
                     "s3:prefix": [
@@ -46,7 +46,7 @@ EOF
 }
 
 resource "aws_iam_role" "s3_role" {
-  name = "snowflake-ep-hackathon-s3-role"
+  name = "snowflake-ep-snowprocore-s3-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
