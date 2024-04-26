@@ -11,11 +11,26 @@ SHOW COMPUTE POOLS;
 SHOW IMAGE REPOSITORIES IN SCHEMA;
 SELECT TRY_PARSE_JSON(SYSTEM$REGISTRY_LIST_IMAGES('/FOOBAR_DB/PUBLIC/images')) AS PAYLOAD;
 
+-- Creating secrets
+CREATE SECRET FOOBAR_DB.PUBLIC.SECRETS_CONN
+  TYPE = password
+  USERNAME = 'dockeruser'
+  PASSWORD = 'superdocker';
+
+SHOW SECRETS IN SCHEMA FOOBAR_DB.PUBLIC;
+
+-- Uploading specs file to the stage
+REMOVE @FOOBAR_DB.PUBLIC.SPECS/dbt-spec.yaml;
+PUT file:///<YOUR_LOCAL_FILE_PATH> @FOOBAR_DB.PUBLIC.SPECS/ AUTO_COMPRESS=FALSE OVERWRITE = TRUE;
+--PUT file:///Users/eplata/Developer/personal/snowflake-sample-code/container-services/spcs-dbt/dbt-spec.yaml @FOOBAR_DB.PUBLIC.SPECS/ AUTO_COMPRESS=FALSE OVERWRITE = TRUE; -- Example
+LS @FOOBAR_DB.PUBLIC.SPECS;
+
 -- ** Before running the following commands be sure to upload the image to the repository and upload the specs file to the stage **
 CREATE SERVICE DBT_SERVICE
 	IN COMPUTE POOL COMPUTE_POOL_FOOBAR
 	FROM @SPECS
 	SPEC = 'dbt-spec.yaml'
+	EXTERNAL_ACCESS_INTEGRATIONS = (SNOWFLAKE_EGRESS_ACCESS_INTEGRATION)
 	MIN_INSTANCES = 1
 	MAX_INSTANCES = 1;
 

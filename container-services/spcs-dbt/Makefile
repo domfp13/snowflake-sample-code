@@ -41,13 +41,12 @@ push-docker-image-registry: ## 5.-Pushing docker image to registry.
 upload-dbt-specs: ## 6.-Uploading dbt specs to specs stage.
 	@ $(MAKE) check-repository
 	@ echo "********** Uploading dbt specs to specs stage **********"
-	@ snow stage put ./dbt-spec.yaml specs -c dbt --overwrite
+	@ snow object stage cp ./dbt-spec.yaml specs -c dbt --overwrite
 
 .PHONY: check-repository
 check-repository: ## 0.- Check if repository varialble is placed in .env file.
 	@ echo "Checking if IMAGEREPOSITORYURI is set"
-	$(if $(IMAGEREPOSITORYURI),,$(error Must set variable IMAGEREPOSITORYURI in .env file))
-	@ echo $(IMAGEREPOSITORYURI)
+	@ $(if $(IMAGEREPOSITORYURI),,$(error Must set variable IMAGEREPOSITORYURI in .env file))
 
 .PHONY: check-account
 check-account: ## 0. Check if Snowflake ACCOUNT variables are placed in .env file.
