@@ -22,6 +22,8 @@ CREATE OR REPLACE STAGE SNOWPROCORE.RAW.FILES_STAGE DIRECTORY = ( ENABLE =  TRUE
 -- UPLOAD A CSV
 PUT file:///Users/eplata/Developer/personal/snowflake-sample-code/sql/03-loading/data_0_0_0.csv @SNOWPROCORE.RAW.FILES_STAGE/ AUTO_COMPRESS=FALSE;
 
+LS @SNOWPROCORE.RAW.FILES_STAGE;
+
 -- CREATE TABLE
 CREATE OR REPLACE TABLE SNOWPROCORE.RAW.ACCOUNTS_RAW
 (
@@ -50,9 +52,11 @@ COPY INTO SNOWPROCORE.RAW.ACCOUNTS_RAW
 
 -- SELECT FROM TABLE
 SELECT * FROM SNOWPROCORE.RAW.ACCOUNTS_RAW;
+SELECT COUNT(*) FROM SNOWPROCORE.RAW.ACCOUNTS_RAW;
 
--- What happends if we try to copy the same file again?
--- What is the PURGE option doing?
+-- ******* Important What happens if we try to copy the same file again?
+-- What is the PURGE flag option doing?
+LS @SNOWPROCORE.RAW.FILES_STAGE;
 
 -- Cleanup
 DROP SCHEMA IF EXISTS SNOWPROCORE.RAW;
